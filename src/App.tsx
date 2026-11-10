@@ -31,7 +31,11 @@ import {
   ArrowDown,
   ArrowUp,
   Lock,
-  AlertCircle
+  AlertCircle,
+  Play,
+  ChevronLeft,
+  ChevronRight,
+  X
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -56,8 +60,67 @@ type FormData = {
   email: string;
   instagram: string;
   cidade: string;
-  estado: string;
 };
+
+interface DepoimentoVideo {
+  id: string;
+  nome: string;
+  empresa: string;
+  instagram: string;
+  driveId: string;
+  foto: string;
+}
+
+const DEPOIMENTOS_VIDEOS: DepoimentoVideo[] = [
+  {
+    id: 'vanessa',
+    nome: 'Vanessa',
+    empresa: 'Aroma & Sabores',
+    instagram: '@aromaesabores.gastronomia',
+    driveId: '1fD3mcXZK11UO91tVq8Fos727KxJsZZKM',
+    foto: '/assets/depoimentos/vanessa.jpg',
+  },
+  {
+    id: 'arilda',
+    nome: 'Arilda',
+    empresa: 'Donari marmitaria',
+    instagram: '@donari.marmitaria',
+    driveId: '1XzPb3idorezJlEu78YXMuuqpoNt645IG',
+    foto: '/assets/depoimentos/arilda.jpg',
+  },
+  {
+    id: 'claudiana',
+    nome: 'Claudiana',
+    empresa: 'Ben´dita',
+    instagram: '@claudianaaparecidamalavasi',
+    driveId: '1b23xK1Z-B9Oz-una2VNY-eHCKn-Rsh-h',
+    foto: '/assets/depoimentos/claudiana.jpg',
+  },
+  {
+    id: 'valquiria',
+    nome: 'Valquiria',
+    empresa: 'Nutrimarmitas',
+    instagram: '@nutrimarmitas_vs',
+    driveId: '1nkIzApybs9PuMvpsJsZt3gWsa6DjLJKw',
+    foto: '/assets/depoimentos/valquiria.jpg',
+  },
+  {
+    id: 'rozane',
+    nome: 'Rozane',
+    empresa: 'Dom & Sabores',
+    instagram: '@domesabores',
+    driveId: '1FL0I1lbpDDFYMXaOEiUESz0GDoyvyfPv',
+    foto: '/assets/depoimentos/rozane.jpg',
+  },
+  {
+    id: 'lucelene',
+    nome: 'Lucelene',
+    empresa: 'Lu das marmitas',
+    instagram: '@ludasmarmitas',
+    driveId: '1xaQQ9qFeVYCKgrXElbqGy06CE8hK5iu2',
+    foto: '/assets/depoimentos/lucelene.jpg',
+  },
+];
 
 export default function App() {
   const { scrollY } = useScroll();
@@ -77,6 +140,27 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedWhatsAppUrl, setSubmittedWhatsAppUrl] = useState('');
   const [highlightFormNotice, setHighlightFormNotice] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<DepoimentoVideo | null>(null);
+  const carouselRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollCarousel = (direction: 'left' | 'right') => {
+    if (carouselRef.current) {
+      const scrollAmount = direction === 'left' ? -300 : 300;
+      carouselRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedVideo(null);
+      }
+    };
+    if (selectedVideo) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedVideo]);
 
   const handleScrollToForm = (e?: React.MouseEvent) => {
     if (!isSubmitted) {
@@ -1089,6 +1173,147 @@ export default function App() {
           </div>
 
       </section>
+
+      {/* Seção de Depoimentos em Vídeo das Alunas EGN (Inspirada na Imagem 1) */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-16 sm:mb-20">
+        <div className="text-center mb-8 sm:mb-10">
+          <h2 className="text-2xl sm:text-4xl font-black text-[#613C26] tracking-tight max-w-3xl mx-auto leading-tight sm:leading-snug">
+            Alunas que já profissionalizaram as suas marmitarias, contam a sua experiência
+          </h2>
+          <div className="w-20 h-1 bg-[#859159] mx-auto mt-3.5 rounded-full"></div>
+        </div>
+
+        {/* Carrossel de Vídeos com Navegação Lateral */}
+        <div className="relative group/carousel">
+          {/* Botão Anterior */}
+          <button
+            type="button"
+            onClick={() => scrollCarousel('left')}
+            className="absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#1c2017]/85 hover:bg-[#613C26] text-white border border-white/20 flex items-center justify-center shadow-xl transition-all cursor-pointer opacity-90 hover:opacity-100 hover:scale-105"
+            aria-label="Vídeo anterior"
+          >
+            <ChevronLeft className="w-6 h-6 text-white" />
+          </button>
+
+          {/* Botão Próximo (estilo botão circular > da Imagem 1) */}
+          <button
+            type="button"
+            onClick={() => scrollCarousel('right')}
+            className="absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#1c2017]/85 hover:bg-[#613C26] text-white border border-white/20 flex items-center justify-center shadow-xl transition-all cursor-pointer opacity-90 hover:opacity-100 hover:scale-105"
+            aria-label="Próximo vídeo"
+          >
+            <ChevronRight className="w-6 h-6 text-white" />
+          </button>
+
+          {/* Cards Roláveis com Snap */}
+          <div
+            ref={carouselRef}
+            className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-5 px-3 sm:px-6 scrollbar-none"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {DEPOIMENTOS_VIDEOS.map((depo) => (
+              <div
+                key={depo.id}
+                onClick={() => setSelectedVideo(depo)}
+                className="group relative cursor-pointer overflow-hidden rounded-3xl bg-[#1c2017] shadow-xl border border-black/10 shrink-0 w-[240px] sm:w-[270px] aspect-[9/15] snap-start hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 select-none"
+              >
+                {/* Foto / Thumbnail do Vídeo */}
+                <img
+                  src={depo.foto}
+                  alt={`Depoimento de ${depo.nome}`}
+                  className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.src = `https://drive.google.com/thumbnail?id=${depo.driveId}&sz=w800`;
+                  }}
+                />
+
+                {/* Botão Play Central Discreto (apenas 1 por vídeo) */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/40 backdrop-blur-xs border border-white/40 flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover:scale-110 group-hover:bg-[#859159] group-hover:border-[#859159]">
+                    <Play className="w-4 h-4 fill-white text-white translate-x-0.5" />
+                  </div>
+                </div>
+
+                {/* Textos na Base: Nome, Empresa e @ do Instagram (sem link) */}
+                <div className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/95 via-black/75 to-transparent pt-16 text-left">
+                  <h3 className="text-lg sm:text-xl font-black text-white leading-tight">
+                    {depo.nome}
+                  </h3>
+                  <p className="text-xs sm:text-sm font-semibold text-[#D4B996] mt-0.5">
+                    {depo.empresa}
+                  </p>
+                  <p className="text-[11px] sm:text-xs text-white/75 font-medium mt-1 select-all">
+                    {depo.instagram}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Barra Decorativa Inferior (como na Imagem 1) */}
+          <div className="w-48 sm:w-64 h-1.5 bg-[#424733]/20 rounded-full mx-auto mt-4 overflow-hidden">
+            <div className="w-1/3 h-full bg-[#859159] rounded-full"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Modal Interativo para Reprodução dos Vídeos */}
+      {selectedVideo && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <div 
+            className="relative w-full max-w-sm sm:max-w-md bg-[#1c2017] rounded-3xl overflow-hidden shadow-2xl border border-white/20 flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Cabeçalho do Modal */}
+            <div className="flex items-center justify-between p-4 bg-[#2a2f22] border-b border-white/10">
+              <div>
+                <h4 className="text-white font-extrabold text-sm sm:text-base leading-tight">
+                  {selectedVideo.nome} ({selectedVideo.empresa})
+                </h4>
+                <p className="text-[#A38C66] text-xs font-semibold">
+                  {selectedVideo.instagram}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedVideo(null)}
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
+                aria-label="Fechar vídeo"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Iframe do Google Drive Player */}
+            <div className="relative w-full aspect-[9/16] bg-black">
+              <iframe
+                src={`https://drive.google.com/file/d/${selectedVideo.driveId}/preview`}
+                className="w-full h-full border-0"
+                allow="autoplay; fullscreen"
+                title={`Depoimento em vídeo de ${selectedVideo.nome}`}
+              />
+            </div>
+
+            {/* Rodapé com link direto caso o navegador restrinja iframes */}
+            <div className="p-3 bg-[#2a2f22] text-center border-t border-white/10 flex items-center justify-between gap-2">
+              <span className="text-[11px] text-white/70">Aluna EGN</span>
+              <a
+                href={`https://drive.google.com/file/d/${selectedVideo.driveId}/view`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[11px] text-[#A38C66] hover:text-white font-semibold underline flex items-center gap-1"
+              >
+                <span>Assistir em tela cheia</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer com Identidade EGN & EASY BYZ */}
       <footer className="border-t border-[#A38C66]/30 bg-[#424733] py-12 px-4 text-[#F0F0F0] text-center text-sm">
