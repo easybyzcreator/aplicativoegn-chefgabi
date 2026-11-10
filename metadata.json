@@ -1,0 +1,8 @@
+{
+  "name": "Remix INSCRICAO APP - ACAO NO INSTA",
+  "description": "Página de vendas oficial do App EASY MENU EGN - Transforme sua marmitaria em uma operação profissional e escalável",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

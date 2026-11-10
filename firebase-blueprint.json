@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "Inscricao": {
+      "title": "Inscrição",
+      "description": "Dados do aluno inscrito no Tour Jurídico",
+      "type": "object",
+      "properties": {
+        "nome": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "email": { "type": "string" },
+        "instagram": { "type": "string" },
+        "cidade": { "type": "string" },
+        "estado": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["nome", "whatsapp", "email"]
+    },
+    "Counter": {
+      "title": "Contador",
+      "description": "Contador sequencial de inscrições",
+      "type": "object",
+      "properties": {
+        "count": { "type": "number" }
+      },
+      "required": ["count"]
+    }
+  },
+  "firestore": {
+    "/inscricoes/{inscricaoId}": {
+      "schema": "Inscricao",
+      "description": "Coleção de inscrições dos alunos"
+    },
+    "/config/registrationCounter": {
+      "schema": "Counter",
+      "description": "Documento único para controle do contador"
+    }
+  }
+}

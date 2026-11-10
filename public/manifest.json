@@ -1,0 +1,17 @@
+{
+  "name": "APP EASY MENU EGN",
+  "short_name": "APP EASY MENU EGN",
+  "description": "App Oficial EASY MENU EGN - Escola de Gastronomia e Negócios",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#424733",
+  "theme_color": "#613C26",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

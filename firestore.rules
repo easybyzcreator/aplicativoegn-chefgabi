@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isValidInscricao(data) {
+      return data.nome is string && data.nome.size() > 0 && data.nome.size() < 120 &&
+             data.email is string && data.email.matches('^.+@.+\\..+$') &&
+             data.whatsapp is string && data.whatsapp.size() >= 8 &&
+             data.cidade is string && data.cidade.size() > 0 &&
+             data.estado is string && data.estado.size() > 0;
+    }
+
+    function isValidCounter(data) {
+      return data.count is number && data.count >= 0;
+    }
+
+    // Inscrições: Qualquer um pode criar, mas ninguém pode ler ou alterar publicamente
+    match /inscricoes/{inscricaoId} {
+      allow create: if isValidInscricao(request.resource.data);
+      allow read, update, delete: if false;
+    }
+
+    // Contador: Necessário para a transação sequencial
+    match /config/{counterId} {
+      allow get: if true;
+      allow create, update: if isValidCounter(request.resource.data);
+      allow list, delete: if false;
+    }
+  }
+}
+

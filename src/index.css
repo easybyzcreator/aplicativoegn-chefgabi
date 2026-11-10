@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-egn-brown: #613C26;
+  --color-egn-olive: #859159;
+  --color-egn-olive-dark: #424733;
+  --color-egn-sand: #A38C66;
+  --color-egn-light: #F0F0F0;
+  --color-egn-card: #FFFFFF;
+}
+
+/* Enhancing image rendering sharpness */
+.crisp-img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
